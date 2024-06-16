@@ -1,0 +1,6 @@
+/home/user/proj/mine/out/build/Default/CMakeFiles/scan.dir
+/home/user/proj/mine/out/build/Default/CMakeFiles/utils.dir
+/home/user/proj/mine/out/build/Default/CMakeFiles/discovery.dir
+/home/user/proj/mine/out/build/Default/CMakeFiles/smap.dir
+/home/user/proj/mine/out/build/Default/CMakeFiles/edit_cache.dir
+/home/user/proj/mine/out/build/Default/CMakeFiles/rebuild_cache.dir

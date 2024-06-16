@@ -1,0 +1,87 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.7.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "smap",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "discovery::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-discovery-Debug-8d98c50ef43fc197b7e0.json",
+					"name" : "discovery",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "scan::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-scan-Debug-1faeb7ec37cab96f9e03.json",
+					"name" : "scan",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "smap::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-smap-Debug-39025623c2b673ca9cff.json",
+					"name" : "smap",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "utils::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-utils-Debug-177c37fae3ec32d63333.json",
+					"name" : "utils",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/user/proj/mine/out/build/Default",
+		"source" : "/home/user/proj/mine"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
