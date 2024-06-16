@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/user/proj/mine/out/build/Default"
+			"value" : "/home/user/proj/ps-proj-smap/out/build/Default"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -415,7 +415,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/user/proj/mine/out/build/Default/CMakeFiles/pkgRedirects"
+			"value" : "/home/user/proj/ps-proj-smap/out/build/Default/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -475,7 +475,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/user/proj/mine"
+			"value" : "/home/user/proj/ps-proj-smap"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -487,7 +487,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "/home/user/proj/mine/out/install/Default"
+			"value" : "/home/user/proj/ps-proj-smap/out/install/Default"
 		},
 		{
 			"name" : "CMAKE_INSTALL_SO_NO_EXE",
@@ -1123,7 +1123,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/user/proj/mine/out/build/Default"
+			"value" : "/home/user/proj/ps-proj-smap/out/build/Default"
 		},
 		{
 			"name" : "smap_IS_TOP_LEVEL",
@@ -1147,7 +1147,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/user/proj/mine"
+			"value" : "/home/user/proj/ps-proj-smap"
 		}
 	],
 	"kind" : "cache",

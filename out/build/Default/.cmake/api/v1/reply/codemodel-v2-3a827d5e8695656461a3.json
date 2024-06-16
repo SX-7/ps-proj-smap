@@ -59,7 +59,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "smap::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-smap-Debug-39025623c2b673ca9cff.json",
+					"jsonFile" : "target-smap-Debug-bf58ac822b22fc1d674f.json",
 					"name" : "smap",
 					"projectIndex" : 0
 				},
@@ -76,8 +76,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/user/proj/mine/out/build/Default",
-		"source" : "/home/user/proj/mine"
+		"build" : "/home/user/proj/ps-proj-smap/out/build/Default",
+		"source" : "/home/user/proj/ps-proj-smap"
 	},
 	"version" : 
 	{

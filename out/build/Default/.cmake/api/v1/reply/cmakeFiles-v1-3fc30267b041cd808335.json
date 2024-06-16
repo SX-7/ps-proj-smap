@@ -91,8 +91,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/home/user/proj/mine/out/build/Default",
-		"source" : "/home/user/proj/mine"
+		"build" : "/home/user/proj/ps-proj-smap/out/build/Default",
+		"source" : "/home/user/proj/ps-proj-smap"
 	},
 	"version" : 
 	{

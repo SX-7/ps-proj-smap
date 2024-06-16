@@ -68,11 +68,11 @@
 			[
 				{
 					"backtrace" : 5,
-					"path" : "/home/user/proj/mine/out/build/Default"
+					"path" : "/home/user/proj/ps-proj-smap/out/build/Default"
 				},
 				{
 					"backtrace" : 5,
-					"path" : "/home/user/proj/mine"
+					"path" : "/home/user/proj/ps-proj-smap"
 				}
 			],
 			"language" : "C",

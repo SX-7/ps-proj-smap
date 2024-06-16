@@ -1,8 +1,8 @@
-# Install script for directory: /home/user/proj/mine
+# Install script for directory: /home/user/proj/ps-proj-smap
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/user/proj/mine/out/install/Default")
+  set(CMAKE_INSTALL_PREFIX "/home/user/proj/ps-proj-smap/out/install/Default")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/user/proj/mine/out/build/Default/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/user/proj/ps-proj-smap/out/build/Default/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
