@@ -14,6 +14,8 @@
 #include <sys/types.h>
 #include <linux/if_arp.h>
 #include <sys/ioctl.h>
+#include <ctype.h>
+
 
 #define TEST_PACKET_SIZE 256
 #define FIRST_OCTET 0
@@ -24,6 +26,9 @@
 #define TCP_ACK_DISCOVERY 0x02
 #define UDP_DISCOVERY 0x04
 #define ICMP_ECHO_DISCOVERY 0x08
+
+extern int do_scans;
+extern int verbose;
 /*
     96 bit (12 bytes) pseudo header needed for header checksum calculation
 */
@@ -151,3 +156,8 @@ int run_discovery(struct octet_store *adresses_to_scan,
                   struct port_store *ps_icmp_echo,
                   char *source_ip,
                   struct address_store *active_hosts);
+
+int parse_adresses(struct octet_store *os, const char *in_address);
+int verify_address(int address);
+int parse_ports(struct port_store *ps, const char *in_ports);
+int verify_port(int address);

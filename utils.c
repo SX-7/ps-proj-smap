@@ -328,7 +328,7 @@ u_int16_t get_port(uint16_t port_index, struct port_store *ps)
         return ps->chunk[port_index / 8].p7;
         break;
     default:
-        return -1;
+        return 0;
         break;
     }
     return 0;
@@ -352,9 +352,10 @@ u_int16_t remove_port_range(uint16_t start_port, uint16_t end_port_inclusive, st
 
 uint16_t get_next_port(struct port_store *ps, uint16_t *port)
 {
-    //when started right at the end
-    if(ps->offset>UINT16_MAX){
-        ps->offset=0;
+    // when started right at the end
+    if (ps->offset > UINT16_MAX)
+    {
+        ps->offset = 0;
         return -1;
     }
 
@@ -368,123 +369,327 @@ uint16_t get_next_port(struct port_store *ps, uint16_t *port)
         }
         ps->offset++;
     }
-    //finished iterating
+    // finished iterating
     ps->offset = 0;
     return -1;
 }
 
-int address_store_init(struct address_store *as, uint32_t init_capacity){
+int address_store_init(struct address_store *as, uint32_t init_capacity)
+{
     as->capacity = init_capacity;
     as->size = 0;
-    as->addresses = malloc(as->capacity*sizeof(uint32_t));
-    memset(as->addresses,0,as->capacity*sizeof(uint32_t));
+    as->addresses = malloc(as->capacity * sizeof(uint32_t));
+    memset(as->addresses, 0, as->capacity * sizeof(uint32_t));
     return 0;
 }
 
-int address_store_get(struct address_store *as, uint32_t index, uint32_t *dest){
-    if(index<as->size){
+int address_store_get(struct address_store *as, uint32_t index, uint32_t *dest)
+{
+    if (index < as->size)
+    {
         *dest = as->addresses[index];
         return 0;
     }
-    else{
+    else
+    {
         return -1;
     }
 }
 
-int address_store_add(struct address_store *as, uint32_t data){
-    if(as->size<as->capacity){
-        as->addresses[as->size]=data;
+int address_store_add(struct address_store *as, uint32_t data)
+{
+    if (as->size < as->capacity)
+    {
+        as->addresses[as->size] = data;
         as->size++;
     }
-    else{
-        uint32_t *new_pointer=realloc(as->addresses,as->capacity*sizeof(uint32_t)*2);
+    else
+    {
+        uint32_t *new_pointer = realloc(as->addresses, as->capacity * sizeof(uint32_t) * 2);
         as->addresses = new_pointer;
-        as->capacity*=2;
-        as->addresses[as->size]=data;
+        as->capacity *= 2;
+        as->addresses[as->size] = data;
         as->size++;
     }
 }
 
-int address_store_add_if_nexists(struct address_store *as, uint32_t data){
-    //naive approach cuz lazy
-    uint32_t temp =0;
+int address_store_add_if_nexists(struct address_store *as, uint32_t data)
+{
+    // naive approach cuz lazy
+    uint32_t temp = 0;
     for (uint32_t i = 0; i < as->size; i++)
     {
-        address_store_get(as,i,&temp);
-        if(memcmp(&data,&temp,sizeof(uint32_t))==0){
+        address_store_get(as, i, &temp);
+        if (memcmp(&data, &temp, sizeof(uint32_t)) == 0)
+        {
             return -1;
         }
     }
     address_store_add(as, data);
 }
 
-int address_store_check_if_exists(struct address_store *as, uint32_t data){
-    //naive approach cuz lazy
-    uint32_t temp =0;
+int address_store_check_if_exists(struct address_store *as, uint32_t data)
+{
+    // naive approach cuz lazy
+    uint32_t temp = 0;
     for (uint32_t i = 0; i < as->size; i++)
     {
-        address_store_get(as,i,&temp);
-        if(memcmp(&data,&temp,sizeof(uint32_t))==0){
+        address_store_get(as, i, &temp);
+        if (memcmp(&data, &temp, sizeof(uint32_t)) == 0)
+        {
             return 0;
         }
     }
     return 1;
 }
 
-int ap_store_init(struct address_port_store *as, uint32_t init_capacity){
+int ap_store_init(struct address_port_store *as, uint32_t init_capacity)
+{
     as->capacity = init_capacity;
     as->size = 0;
-    as->addresses = malloc(as->capacity*sizeof(struct address_port_status));
-    memset(as->addresses,0,as->capacity*sizeof(struct address_port_status));
+    as->addresses = malloc(as->capacity * sizeof(struct address_port_status));
+    memset(as->addresses, 0, as->capacity * sizeof(struct address_port_status));
     return 0;
 }
 
-int ap_store_get(struct address_port_store *as, uint32_t index, struct address_port_status *ap){
-    if(index<as->size){
+int ap_store_get(struct address_port_store *as, uint32_t index, struct address_port_status *ap)
+{
+    if (index < as->size)
+    {
         *ap = as->addresses[index];
         return 0;
     }
-    else{
+    else
+    {
         return -1;
     }
 }
 
-int ap_store_add(struct address_port_store *as, struct address_port_status ap){
-    if(as->size<as->capacity){
-        as->addresses[as->size]=ap;
+int ap_store_add(struct address_port_store *as, struct address_port_status ap)
+{
+    if (as->size < as->capacity)
+    {
+        as->addresses[as->size] = ap;
         as->size++;
     }
-    else{
-        struct address_port_status *new_pointer=realloc(as->addresses,as->capacity*sizeof(struct address_port_status)*2);
+    else
+    {
+        struct address_port_status *new_pointer = realloc(as->addresses, as->capacity * sizeof(struct address_port_status) * 2);
         as->addresses = new_pointer;
-        as->capacity*=2;
-        as->addresses[as->size]=ap;
+        as->capacity *= 2;
+        as->addresses[as->size] = ap;
         as->size++;
     }
 }
 
-int ap_store_add_if_nexists(struct address_port_store *as, struct address_port_status ap){
-    //naive approach cuz lazy
+int ap_store_add_if_nexists(struct address_port_store *as, struct address_port_status ap)
+{
+    // naive approach cuz lazy
     struct address_port_status temp;
     for (uint32_t i = 0; i < as->size; i++)
     {
-        ap_store_get(as,i,&temp);
-        //we don't wanna duplicate ports, even if diff statuses
-        if(memcmp(&ap,&temp,sizeof(uint32_t)+sizeof(uint16_t))==0){
+        ap_store_get(as, i, &temp);
+        // we don't wanna duplicate ports, even if diff statuses
+        if (memcmp(&ap, &temp, sizeof(uint32_t) + sizeof(uint16_t)) == 0)
+        {
             return -1;
         }
     }
     ap_store_add(as, ap);
 }
 
-int ap_store_check_if_exists(struct address_port_store *as, struct address_port_status ap){
+int ap_store_check_if_exists(struct address_port_store *as, struct address_port_status ap)
+{
     struct address_port_status temp;
     for (uint32_t i = 0; i < as->size; i++)
     {
-        ap_store_get(as,i,&temp);
-        if(memcmp(&ap,&temp,sizeof(uint32_t)+sizeof(uint16_t))==0){
+        ap_store_get(as, i, &temp);
+        if (memcmp(&ap, &temp, sizeof(uint32_t) + sizeof(uint16_t)) == 0)
+        {
             return 0;
         }
     }
     return 1;
+}
+
+int parse_adresses(struct octet_store *os, const char *in_address)
+{
+    int i = 0;
+    int current_octet = FIRST_OCTET;
+    int first_buf = 0;
+    int second_buf = 0;
+    int in_range = 0;
+    while (in_address[i] != '\0')
+    {
+        if (current_octet == 4)
+        {
+            printf("Wrong octet count %u\n", current_octet + 1);
+        }
+        if (isdigit(in_address[i]))
+        {
+            if (in_range)
+            {
+                second_buf += in_address[i] - (long)'0';
+                verify_address(second_buf);
+                second_buf *= 10;
+            }
+            else
+            {
+                first_buf += in_address[i] - (long)'0';
+                verify_address(first_buf);
+                first_buf *= 10;
+            }
+        }
+        else
+        {
+            switch (in_address[i])
+            {
+            case '.':
+                if (in_range)
+                {
+                    add_address_position_range(current_octet, first_buf / 10, second_buf / 10, os);
+                }
+                else
+                {
+                    add_address_position(current_octet, first_buf / 10, os);
+                }
+                first_buf = 0;
+                second_buf = 0;
+                in_range = 0;
+                current_octet += 1;
+                break;
+            case ',':
+                if (in_range)
+                {
+                    add_address_position_range(current_octet, first_buf / 10, second_buf / 10, os);
+                }
+                else
+                {
+                    add_address_position(current_octet, first_buf / 10, os);
+                }
+                first_buf = 0;
+                second_buf = 0;
+                in_range = 0;
+                break;
+            case '-':
+                if (in_range)
+                {
+                    printf("Multipoint address range\n");
+                }
+                else
+                {
+                    in_range = 1;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        i++;
+    }
+    if (in_range)
+    {
+        add_address_position_range(current_octet, first_buf / 10, second_buf / 10, os);
+    }
+    else
+    {
+        add_address_position(current_octet, first_buf / 10, os);
+    }
+}
+
+int verify_address(int address)
+{
+    if (address > 255 || address < 0)
+    {
+        printf("Wrong address range %d\n", address);
+        exit(1);
+    }
+}
+
+int parse_ports(struct port_store *ps, const char *in_ports)
+{
+    int i = 0;
+    int first_buf = 0;
+    int second_buf = 0;
+    int in_range = 0;
+    while (in_ports[i] != '\0')
+    {
+        if (isdigit(in_ports[i]))
+        {
+            if (in_range)
+            {
+                second_buf += in_ports[i] - (long)'0';
+                verify_port(second_buf);
+                second_buf *= 10;
+            }
+            else
+            {
+                first_buf += in_ports[i] - (long)'0';
+                verify_port(first_buf);
+                first_buf *= 10;
+            }
+        }
+        else
+        {
+            switch (in_ports[i])
+            {
+            case '.':
+                if (in_range)
+                {
+                    add_port_range(first_buf / 10, second_buf / 10, ps);
+                }
+                else
+                {
+                    add_port(first_buf / 10, ps);
+                }
+                first_buf = 0;
+                second_buf = 0;
+                in_range = 0;
+                break;
+            case ',':
+                if (in_range)
+                {
+                    add_port_range(first_buf / 10, second_buf / 10, ps);
+                }
+                else
+                {
+                    add_port(first_buf / 10, ps);
+                }
+                first_buf = 0;
+                second_buf = 0;
+                in_range = 0;
+                break;
+            case '-':
+                if (in_range)
+                {
+                    printf("Multipoint address range\n");
+                }
+                else
+                {
+                    in_range = 1;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        i++;
+    }
+    if (in_range)
+    {
+        add_port_range(first_buf / 10, second_buf / 10, ps);
+    }
+    else
+    {
+        add_port(first_buf / 10, ps);
+    }
+}
+
+int verify_port(int port)
+{
+    if (port > UINT16_MAX || port < 0)
+    {
+        printf("Wrong port range %d\n", port);
+        exit(1);
+    }
 }

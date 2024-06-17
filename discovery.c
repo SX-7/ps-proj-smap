@@ -248,7 +248,7 @@ int run_discovery(struct octet_store *adresses_to_scan,
     int cont_flag =0;
     while (sin.sin_addr.s_addr != -1)
     {
-        printf("%s\n",inet_ntoa(sin.sin_addr));
+        if(verbose){printf("Discovery on %s\n",inet_ntoa(sin.sin_addr));}
         // tcp syn
         while (get_next_port(ps_tcp_syn, &port) == 0)
         {
@@ -309,6 +309,7 @@ int run_discovery(struct octet_store *adresses_to_scan,
         // icmp
         while (get_next_port(ps_icmp_echo, &port) == 0)
         {
+            //actually doesn't care abt ports
             sin.sin_port = port;
             if (check_adress_up_icmp_echo(si, si2, sin, source_ip, 80) == 0)
             {
