@@ -1,6 +1,5 @@
 #include "smap.h"
 
-
 int do_scans;
 int verbose;
 int main(int argc, const char **argv)
@@ -45,81 +44,90 @@ int main(int argc, const char **argv)
     }
     else
     {
-        const char *ifname = argv[argc-2];
-        
+        const char *ifname = argv[argc - 2];
+
         int sd = socket(AF_PACKET, SOCK_RAW, 0);
-        
-        if (sd <= 0) {
+
+        if (sd <= 0)
+        {
             perror("socket()");
             exit(1);
         }
-        if (strlen(ifname) > (IFNAMSIZ - 1)) {
+        if (strlen(ifname) > (IFNAMSIZ - 1))
+        {
             printf("Too long interface name, MAX=%i\n", IFNAMSIZ - 1);
             exit(1);
         }
 
         strcpy(ifr.ifr_name, ifname);
 
-        //Get interface index using name
-        if (ioctl(sd, SIOCGIFADDR, &ifr) == -1) {
+        // Get interface index using name
+        if (ioctl(sd, SIOCGIFADDR, &ifr) == -1)
+        {
             perror("SIOCGIFADDR");
             exit(1);
         }
-        if(verbose){printf("Using source ip %s\n", inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));}
-        strcpy(source_ip,inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
+        if (verbose)
+        {
+            printf("Using source ip %s\n", inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
+        }
+        strcpy(source_ip, inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
 
         // select ip adresses to scan
         adresses_to_scan = malloc(sizeof(struct octet_store));
         init_address_positions(adresses_to_scan);
-        parse_adresses(adresses_to_scan, argv[argc-1]);
+        parse_adresses(adresses_to_scan, argv[argc - 1]);
 
         char buf[255];
-        for (int i = 1; i < argc-2; i++)
+        for (int i = 1; i < argc - 2; i++)
         {
-            if(argv[i][0]!='-'){
-                printf("Unknown argument %s\n",argv[i]);
+            if (argv[i][0] != '-')
+            {
+                printf("Unknown argument %s\n", argv[i]);
                 exit(1);
             }
-            if(!memcmp(argv[i],"-p",2) && strlen(argv[i])>2){
-                strncpy(buf, &argv[i][2],254);
-                buf[254]='\0';
-                parse_ports(ps_scan,buf);
+            if (!memcmp(argv[i], "-p", 2) && strlen(argv[i]) > 2)
+            {
+                strncpy(buf, &argv[i][2], 254);
+                buf[254] = '\0';
+                parse_ports(ps_scan, buf);
             }
-            if(!memcmp(argv[i],"-PS",3) && strlen(argv[i])>3){
-                strncpy(buf, &argv[i][3],254);
-                buf[254]='\0';
-                parse_ports(ps_tcp_syn,buf);
+            if (!memcmp(argv[i], "-PS", 3) && strlen(argv[i]) > 3)
+            {
+                strncpy(buf, &argv[i][3], 254);
+                buf[254] = '\0';
+                parse_ports(ps_tcp_syn, buf);
             }
-            if(!memcmp(argv[i],"-PA",3) && strlen(argv[i])>3){
-                strncpy(buf, &argv[i][3],254);
-                buf[254]='\0';
-                parse_ports(ps_tcp_ack,buf);
+            if (!memcmp(argv[i], "-PA", 3) && strlen(argv[i]) > 3)
+            {
+                strncpy(buf, &argv[i][3], 254);
+                buf[254] = '\0';
+                parse_ports(ps_tcp_ack, buf);
             }
-            if(!memcmp(argv[i],"-PU",3) && strlen(argv[i])>3){
-                strncpy(buf, &argv[i][3],254);
-                buf[254]='\0';
-                parse_ports(ps_udp,buf);
+            if (!memcmp(argv[i], "-PU", 3) && strlen(argv[i]) > 3)
+            {
+                strncpy(buf, &argv[i][3], 254);
+                buf[254] = '\0';
+                parse_ports(ps_udp, buf);
             }
-            if(!memcmp(argv[i],"-PE",3)){
-                //adding anything to signify we're gonna be using this
+            if (!memcmp(argv[i], "-PE", 3))
+            {
+                // adding anything to signify we're gonna be using this
                 add_port(8, ps_icmp_echo);
             }
-            if(!memcmp(argv[i],"-sS",3)){
+            if (!memcmp(argv[i], "-sS", 3))
+            {
                 do_scans = 1;
             }
-            if(!memcmp(argv[i],"-v",2)){
+            if (!memcmp(argv[i], "-v", 2))
+            {
                 verbose = 1;
             }
         }
-        
     }
 
-    // select ports to scan
-    
-
     // initial
-    
-    
+
     struct address_store active_hosts;
     address_store_init(&active_hosts, 16);
     int st = socket(PF_INET, SOCK_RAW, IPPROTO_TCP);
@@ -158,11 +166,12 @@ int main(int argc, const char **argv)
         printf("Host %s up\n", inet_ntoa(sin.sin_addr));
     }
 
-    if(!do_scans){
+    if (!do_scans)
+    {
         exit(0);
     }
 
-    //run scan on active hosts
+    // run scan on active hosts
     struct address_port_store results;
     ap_store_init(&results, 16);
     int pid = fork();
@@ -191,7 +200,7 @@ int main(int argc, const char **argv)
         scan_tcp_syn_listen(st2, &active_hosts, &results, pid);
     }
 
-    //print results
+    // print results
     struct address_port_status aps_temp;
     struct sockaddr_in sin_temp;
     sin_temp.sin_family = AF_INET;

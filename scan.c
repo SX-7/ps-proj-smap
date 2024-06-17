@@ -28,34 +28,43 @@ int scan_tcp_syn_listen(int sd, struct address_store *as, struct address_port_st
     memset(datagram, 0, TEST_PACKET_SIZE);
     struct sockaddr_in recv_sa;
     socklen_t adr_len = sizeof(struct sockaddr_in);
-    int status =0;
+    int status = 0;
+    int flags =0;
     while (1)
     {
-        
-        //checkup on child
+
+        // checkup on child
         int pid = waitpid(sender_pid, &status, WNOHANG);
-        if(status!=0){
-            return 0;
+        if (status != 0)
+        {
+            //if sender finished the work, parse the rest of the buffer and quit
+            flags |= MSG_DONTWAIT;
         }
 
-        if (recvfrom(sd, datagram, sizeof(struct tcphdr) + sizeof(struct iphdr), 0, (struct sockaddr *)&recv_sa, &adr_len) < 0)
+        if (recvfrom(sd, datagram, sizeof(struct tcphdr) + sizeof(struct iphdr), flags, (struct sockaddr *)&recv_sa, &adr_len) < 0)
         {
+            if(errno==EAGAIN || errno==EWOULDBLOCK)
+            {
+                return 0;
+            }
             perror("recvfrom error");
         }
         else
         {
             struct tcphdr *tcphr = (struct tcphdr *)(datagram + sizeof(struct iphdr));
-            if(address_store_check_if_exists(as,recv_sa.sin_addr.s_addr)==0){
-                //existing ip
-                // got good ip
+            if (address_store_check_if_exists(as, recv_sa.sin_addr.s_addr) == 0)
+            {
+                // existing ip
+                //  got good ip
                 if (tcphr->ack == 1 && tcphr->syn == 1)
                 {
                     struct address_port_status ap;
-                    ap.address=recv_sa.sin_addr.s_addr;
-                    ap.port=tcphr->source;
-                    ap.status=1;
-                    if(ap_store_add_if_nexists(aps,ap)==0){
-                        printf("%s, %u, %u\n", inet_ntoa(recv_sa.sin_addr),tcphr->source,ap.status);
+                    ap.address = recv_sa.sin_addr.s_addr;
+                    ap.port = tcphr->source;
+                    ap.status = 1;
+                    if (ap_store_add_if_nexists(aps, ap) == 0)
+                    {
+                        printf("%s, %u, %u\n", inet_ntoa(recv_sa.sin_addr), tcphr->source, ap.status);
                     }
                     // got good flags
                     continue;
@@ -63,20 +72,20 @@ int scan_tcp_syn_listen(int sd, struct address_store *as, struct address_port_st
                 if (tcphr->rst == 1)
                 {
                     struct address_port_status ap;
-                    ap.address=recv_sa.sin_addr.s_addr;
-                    ap.port=tcphr->source;
-                    ap.status=0;
-                    if(ap_store_add_if_nexists(aps,ap)==0){
-                        printf("%s, %u, %u\n", inet_ntoa(recv_sa.sin_addr),tcphr->source,ap.status);
+                    ap.address = recv_sa.sin_addr.s_addr;
+                    ap.port = tcphr->source;
+                    ap.status = 0;
+                    if (ap_store_add_if_nexists(aps, ap) == 0)
+                    {
+                        printf("%s, %u, %u\n", inet_ntoa(recv_sa.sin_addr), tcphr->source, ap.status);
                     }
-                    //port closed
+                    // port closed
                     continue;
                 }
                 else
                 {
-                    //unexpected, ignore
+                    // unexpected, ignore
                 }
-
             }
             else
             {

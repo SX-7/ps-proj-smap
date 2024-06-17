@@ -245,10 +245,13 @@ int run_discovery(struct octet_store *adresses_to_scan,
 
     int si2 = socket(PF_INET, SOCK_RAW, IPPROTO_ICMP);
     setsockopt(si2, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof tv);
-    int cont_flag =0;
+    int cont_flag = 0;
     while (sin.sin_addr.s_addr != -1)
     {
-        if(verbose){printf("Discovery on %s\n",inet_ntoa(sin.sin_addr));}
+        if (verbose)
+        {
+            printf("Discovery on %s\n", inet_ntoa(sin.sin_addr));
+        }
         // tcp syn
         while (get_next_port(ps_tcp_syn, &port) == 0)
         {
@@ -256,15 +259,17 @@ int run_discovery(struct octet_store *adresses_to_scan,
             if (check_adress_up_tcp_syn(st, sin, source_ip, 80) == 0)
             {
                 address_store_add_if_nexists(active_hosts, sin.sin_addr.s_addr);
-                cont_flag=1;
+                cont_flag = 1;
                 // printf("Syn: %s port %u up\n",inet_ntoa(sin.sin_addr), ntohs(sin.sin_port));
             }
-            if(cont_flag){
+            if (cont_flag)
+            {
                 break;
             }
         }
-        if(cont_flag){
-            cont_flag=0;
+        if (cont_flag)
+        {
+            cont_flag = 0;
             sin.sin_addr.s_addr = get_next_address(adresses_to_scan);
             continue;
         }
@@ -275,15 +280,17 @@ int run_discovery(struct octet_store *adresses_to_scan,
             if (check_adress_up_tcp_ack(st, sin, source_ip, 80) == 0)
             {
                 address_store_add_if_nexists(active_hosts, sin.sin_addr.s_addr);
-                cont_flag=1;
+                cont_flag = 1;
                 /// printf("Ack: %s port %u up\n",inet_ntoa(sin.sin_addr), ntohs(sin.sin_port));
             }
-            if(cont_flag){
+            if (cont_flag)
+            {
                 break;
             }
         }
-        if(cont_flag){
-            cont_flag=0;
+        if (cont_flag)
+        {
+            cont_flag = 0;
             sin.sin_addr.s_addr = get_next_address(adresses_to_scan);
             continue;
         }
@@ -294,35 +301,39 @@ int run_discovery(struct octet_store *adresses_to_scan,
             if (check_adress_up_udp_port_unreachable(su, si, sin, source_ip, 80) == 0)
             {
                 address_store_add_if_nexists(active_hosts, sin.sin_addr.s_addr);
-                cont_flag=1;
+                cont_flag = 1;
                 // printf("UDP: %s port %u up\n",inet_ntoa(sin.sin_addr), ntohs(sin.sin_port));
             }
-            if(cont_flag){
+            if (cont_flag)
+            {
                 break;
             }
         }
-        if(cont_flag){
-            cont_flag=0;
+        if (cont_flag)
+        {
+            cont_flag = 0;
             sin.sin_addr.s_addr = get_next_address(adresses_to_scan);
             continue;
         }
         // icmp
         while (get_next_port(ps_icmp_echo, &port) == 0)
         {
-            //actually doesn't care abt ports
+            // actually doesn't care abt ports
             sin.sin_port = port;
             if (check_adress_up_icmp_echo(si, si2, sin, source_ip, 80) == 0)
             {
                 address_store_add_if_nexists(active_hosts, sin.sin_addr.s_addr);
-                cont_flag=1;
+                cont_flag = 1;
                 // printf("ICMP: %s port %u up\n",inet_ntoa(sin.sin_addr), ntohs(sin.sin_port));
             }
-            if(cont_flag){
+            if (cont_flag)
+            {
                 break;
             }
         }
-        if(cont_flag){
-            cont_flag=0;
+        if (cont_flag)
+        {
+            cont_flag = 0;
             sin.sin_addr.s_addr = get_next_address(adresses_to_scan);
             continue;
         }

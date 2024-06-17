@@ -16,7 +16,6 @@
 #include <sys/ioctl.h>
 #include <ctype.h>
 
-
 #define TEST_PACKET_SIZE 256
 #define FIRST_OCTET 0
 #define SECOND_OCTET 1
@@ -68,36 +67,41 @@ struct octet_store
     } offset;
 };
 
-//should be packed, if it's not 1 byte, something's wrong with the packing. check compiler
-struct port_chunk{
-    uint8_t p0 :1;
-    uint8_t p1 :1;
-    uint8_t p2 :1;
-    uint8_t p3 :1;
-    uint8_t p4 :1;
-    uint8_t p5 :1;
-    uint8_t p6 :1;
-    uint8_t p7 :1;
+// should be packed, if it's not 1 byte, something's wrong with the packing. check compiler
+struct port_chunk
+{
+    uint8_t p0 : 1;
+    uint8_t p1 : 1;
+    uint8_t p2 : 1;
+    uint8_t p3 : 1;
+    uint8_t p4 : 1;
+    uint8_t p5 : 1;
+    uint8_t p6 : 1;
+    uint8_t p7 : 1;
 };
 
-struct port_store{
+struct port_store
+{
     uint32_t offset;
     struct port_chunk chunk[8192];
 };
 
-struct address_store{
+struct address_store
+{
     uint32_t capacity;
     uint32_t size;
     uint32_t *addresses;
 };
 
-struct address_port_status{
+struct address_port_status
+{
     uint32_t address;
     uint16_t port;
     uint16_t status;
 };
 
-struct address_port_store{
+struct address_port_store
+{
     uint32_t capacity;
     uint32_t size;
     struct address_port_status *addresses;
@@ -111,24 +115,24 @@ int check_adress_up_udp_port_unreachable(int sd_udp, int sd_icmp, struct sockadd
 int check_adress_up_icmp_echo(int sd_sender, int sd_listener, struct sockaddr_in dest_sa, char *source_ip, int source_port);
 // utils
 unsigned short csum(unsigned short *ptr, int nbytes);
-int init_address_positions(struct octet_store * oc);
-int add_address_position(int octet, short address, struct octet_store * oc);
-int add_address_position_range(int octet, short address_bottom, short address_top_inclusive, struct octet_store * oc );
-in_addr_t get_next_address(struct octet_store * oc);
-//ports
+int init_address_positions(struct octet_store *oc);
+int add_address_position(int octet, short address, struct octet_store *oc);
+int add_address_position_range(int octet, short address_bottom, short address_top_inclusive, struct octet_store *oc);
+in_addr_t get_next_address(struct octet_store *oc);
+// ports
 uint16_t add_port(uint16_t port_index, struct port_store *ps);
 uint16_t remove_port(uint16_t port_index, struct port_store *ps);
 uint16_t get_port(uint16_t port_index, struct port_store *ps);
-u_int16_t add_port_range(uint16_t start_port, uint16_t end_port_inclusive, struct port_store* ps);
-u_int16_t remove_port_range(uint16_t start_port, uint16_t end_port_inclusive, struct port_store* ps);
-uint16_t get_next_port(struct port_store* ps, uint16_t *port);
-//vector kinda
+u_int16_t add_port_range(uint16_t start_port, uint16_t end_port_inclusive, struct port_store *ps);
+u_int16_t remove_port_range(uint16_t start_port, uint16_t end_port_inclusive, struct port_store *ps);
+uint16_t get_next_port(struct port_store *ps, uint16_t *port);
+// vector kinda
 int address_store_init(struct address_store *as, uint32_t init_capacity);
 int address_store_get(struct address_store *as, uint32_t index, uint32_t *dest);
 int address_store_add(struct address_store *as, uint32_t data);
 int address_store_add_if_nexists(struct address_store *as, uint32_t data);
 int address_store_check_if_exists(struct address_store *as, uint32_t data);
-//other vector
+// other vector
 int ap_store_init(struct address_port_store *as, uint32_t init_capacity);
 int ap_store_get(struct address_port_store *as, uint32_t index, struct address_port_status *ap);
 int ap_store_add(struct address_port_store *as, struct address_port_status ap);
