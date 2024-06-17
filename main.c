@@ -154,6 +154,7 @@ int main(int argc, const char **argv)
                   source_ip,
                   &active_hosts);
 
+    printf("===\n");
     // print up hosts
     uint32_t temp = 0;
     struct sockaddr_in sin;
@@ -170,14 +171,13 @@ int main(int argc, const char **argv)
     {
         exit(0);
     }
-
+    printf("===\n");
     // run scan on active hosts
     struct address_port_store results;
     ap_store_init(&results, 16);
     int pid = fork();
     if (pid == 0)
     {
-
         uint32_t target;
         uint16_t port;
         sleep(1);
@@ -192,7 +192,7 @@ int main(int argc, const char **argv)
             }
         }
         // no idea how to time it properly here
-        //sleep(1);
+        sleep(1);
         exit(1);
     }
     else

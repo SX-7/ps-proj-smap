@@ -229,6 +229,31 @@ in_addr_t get_next_address(struct octet_store *oc)
     return inet_addr(buf);
 }
 
+int check_if_in_store(in_addr_t address, struct octet_store *oc)
+{
+    char buf[100];
+    in_addr_t temp;
+    for (uint32_t first = 0; first < oc->count.first; first++)
+    {
+        for (uint32_t second = 0; second < oc->count.second; second++)
+        {
+            for (uint32_t third = 0; third < oc->count.third; third++)
+            {
+                for (uint32_t fourth = 0; fourth < oc->count.fourth; fourth++)
+                {
+                    snprintf(buf, 100, "%d.%d.%d.%d", oc->octet.first[first], oc->octet.second[second], oc->octet.third[third], oc->octet.fourth[fourth]);
+                    temp =inet_addr(buf);
+                    if(memcmp(&temp,&address,sizeof(in_addr_t))==0){
+                        return 0;
+                        
+                    };
+                }
+            }
+        }
+    }
+    return 1;
+}
+
 uint16_t add_port(uint16_t port_index, struct port_store *ps)
 {
     switch (port_index % 8)
@@ -426,6 +451,7 @@ int address_store_add_if_nexists(struct address_store *as, uint32_t data)
         }
     }
     address_store_add(as, data);
+    return 0;
 }
 
 int address_store_check_if_exists(struct address_store *as, uint32_t data)

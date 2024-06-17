@@ -109,16 +109,26 @@ struct address_port_store
 
 void sigquit();
 // host discovery
-int check_adress_up_tcp_ack(int sd, struct sockaddr_in sa, char *source_ip, int source_port);
-int check_adress_up_tcp_syn(int sd, struct sockaddr_in sa, char *source_ip, int source_port);
-int check_adress_up_udp_port_unreachable(int sd_udp, int sd_icmp, struct sockaddr_in dest_sa, char *source_ip, int source_port);
-int check_adress_up_icmp_echo(int sd_sender, int sd_listener, struct sockaddr_in dest_sa, char *source_ip, int source_port);
+int check_adress_up_tcp_ack(struct octet_store *os, struct port_store *ps_tcp_syn, char *source_ip, int source_port, struct address_store *results);
+int check_adress_up_tcp_ack_send(int sd, struct sockaddr_in dest_sa, char *source_ip, int source_port);
+int check_adress_up_tcp_ack_listen(int sd, struct octet_store *os, struct address_store *as, int sender_pid);
+int check_adress_up_tcp_syn(struct octet_store *os, struct port_store *ps_tcp_syn, char *source_ip, int source_port, struct address_store *results);
+int check_adress_up_tcp_syn_send(int sd, struct sockaddr_in dest_sa, char *source_ip, int source_port);
+int check_adress_up_tcp_syn_listen(int sd, struct octet_store *os, struct address_store *as, int sender_pid);
+int check_adress_up_udp_port_unreachable(struct octet_store *os, struct port_store *ps_udp, char *source_ip, int source_port, struct address_store *results);
+int check_adress_up_udp_port_unreachable_send(int sd, struct sockaddr_in dest_sa, char *source_ip, int source_port);
+int check_adress_up_udp_port_unreachable_listen(int sd, struct octet_store *os, struct address_store *as, int sender_pid);
+int check_adress_up_icmp_echo(struct octet_store *os, struct port_store *ps_udp, char *source_ip, int source_port, struct address_store *results);
+int check_adress_up_icmp_echo_send(int sd, struct sockaddr_in dest_sa, char *source_ip, int source_port);
+int check_adress_up_icmp_echo_listen(int sd, struct octet_store *os, struct address_store *as, int sender_pid);
+
 // utils
 unsigned short csum(unsigned short *ptr, int nbytes);
 int init_address_positions(struct octet_store *oc);
 int add_address_position(int octet, short address, struct octet_store *oc);
 int add_address_position_range(int octet, short address_bottom, short address_top_inclusive, struct octet_store *oc);
 in_addr_t get_next_address(struct octet_store *oc);
+int check_if_in_store(in_addr_t address, struct octet_store *oc);
 // ports
 uint16_t add_port(uint16_t port_index, struct port_store *ps);
 uint16_t remove_port(uint16_t port_index, struct port_store *ps);
@@ -165,3 +175,4 @@ int parse_adresses(struct octet_store *os, const char *in_address);
 int verify_address(int address);
 int parse_ports(struct port_store *ps, const char *in_ports);
 int verify_port(int address);
+
